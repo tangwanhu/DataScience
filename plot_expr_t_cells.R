@@ -1,0 +1,10 @@
+args = commandArgs(TRUE);
+x <- read.table(args[1])
+m <- read.table(args[2])
+pdf(args[3])
+plot(x$time,x$ITR,type='o',col='blue', ylim=c(m[1,2],m[1,1]),xlab="Time Point", ylab="RPKM", main=args[4])
+lines(x$time,x$TH1,type='o',col='red')
+lines(x$time,x$TH17,type='o',col='green')
+lines(x$time,x$TH2,type='o',col='black')
+legend("topleft",c("TH1", "TH2", "TH17", "iTreg"),col=c("red", "black", "green", "blue"), lty=1)
+dev.off()

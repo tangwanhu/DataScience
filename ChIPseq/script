@@ -1,0 +1,6 @@
+##~/new_prog/pipeline_pre /data/kuw/fastq_backup/run926_161018_D00638_0230_ACAC56ANXX/Sample_KZ1201
+
+#~/new_prog/RNAseq_pipeline_SE KZ1201_GB0127_GGCTAC_L001_R1.fastq 20 0 GB0127 mm9 0 0
+
+
+~/new_prog/chipseq_pipeline_SEQ KZ1153_GA9820_CTTGTA_L007_R1.fastq 200 75 KZ1153_GA9820 mm9 0 0

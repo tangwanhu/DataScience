@@ -1,0 +1,23 @@
+
+
+find  $1* -name "*.gz" >script_cp
+sed -i 's/^\//cp \//g' script_cp
+sed -i 's/.gz/.gz ./g' script_cp
+chmod 755 script_cp
+./script_cp
+ls *_001.fastq.gz >script_cat
+cp script_cat script_cat_1
+sed -i 's/_001.fastq.gz/.fastq.gz/g' script_cat_1
+awk '{str1=$1; getline < "script_cat"; print "cat "str1"  "$2 > "script_cat_2" }' script_cat
+sed -i 's/_001.fastq.gz/_*.fastq.gz/g' script_cat_2
+awk '{str1=$1; str2=$2; getline < "script_cat_2"; print $1" "$2">"str1 >"script_cat"}' script_cat_1
+sed -i 's/cat/rm/g' script_cat_2
+cat script_cat script_cat_2 >script_cat_
+mv script_cat_ script_cat
+awk '{str1=$1; getline < "script_cat_1"; print "gunzip "str1"  "$2 > "script_cat_2" }' script_cat_1
+mv script_cat_2 script_gunzip
+rm script_cat_1
+chmod 755 script_cat
+chmod 755 script_gunzip
+./script_cat
+./script_gunzip

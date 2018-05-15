@@ -1,0 +1,6 @@
+sort -k2,2 -k3g,3</data/kuw/biocore/wlku/Keji/run733/GA6401_macs_without_input_peaks_with_peak_pos.txt>/data/kuw/biocore/wlku/Keji/run733/GA6401_macs_without_input_peaks_with_peak_pos_sorted.txt
+
+sort -k2,2 -k3g,3</data/kuw/biocore/wlku/Keji/run733/GA6401_macs_without_input_peaks_at_tss_with_peak_pos.txt>/data/kuw/biocore/wlku/Keji/run733/GA6401_macs_without_input_peaks_at_tss_with_peak_pos_sorted.txt
+
+sort -k2,2 -k3g,3</data/kuw/biocore/wlku/Keji/run733/GA6401_macs_without_input_peaks_without_tss_with_peak_pos.txt>/data/kuw/biocore/wlku/Keji/run733/GA6401_macs_without_input_peaks_without_tss_with_peak_pos_sorted.txt
+

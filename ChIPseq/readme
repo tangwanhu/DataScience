@@ -1,0 +1,868 @@
+wes
+#mm9
+vi /home/wes/jksrc/kent/src/hg/makeDb/trackDb/mouse/mm9/trackDb.ra
+
+cd /home/wes/jksrc/kent/src/hg/makeDb/trackDb/
+make alpha DBS='mm9'
+cd /data/goldenPath/mm9/customtracks/WKu
+
+stranz
+scp *.graph wes@165.112.111.61:/data/goldenPath/mm9/customtracks/WKu
+vi script
+./script
+
+pwd:kzlab!123
+
+
+mysql -u root -p
+use mm9
+select * from grp;
+insert into grp values ('CHiT','Chi Tian',2.000,0);
+#delete from grp WHERE name='Kinases';
+#replace into grp values ('Kinases','Kinases',1.0021);
+exit
+
+#hg18
+mkdir /data/goldenPath/hg18/customtracks/KuW
+vi /home/wes/jksrc/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.ra
+
+cd /home/wes/jksrc/kent/src/hg/makeDb/trackDb/
+make alpha DBS='hg18'
+cd /data/goldenPath/hg18/customtracks/KuW
+
+-============================================================================
+1) map reads to peaks and filter reads that have different fragment length.
+============================================================================
+
+a) Run /home/wlku/Desktop/ben_stanton_data/sort_chipseq_pos.cpp
+b) Run /home/wlku/Desktop/ben_stanton_data/quantify_chromo_column.cpp
+c)	cd  /home/wlku/Desktop/ben_stanton_data/run789
+
+	sort -k2,2 -k5g,5<GA7219_mouse_ES_BrgR885H_0_0_mapq10_noDup_with_chippos_quantify_chromo.bed>GA7219_mouse_ES_BrgR885H_0_0_mapq10_noDup_with_chippos_sort.txt
+
+	or
+ 
+	cd  /home/wlku/Desktop/ben_stanton_data/run792
+
+	sort -k2,2 -k5g,5<GA7821_mouse_Brg_EtOH_Ub_0_0_mapq10_noDup_with_chippos_quantify_chromo.bed>GA7821_mouse_Brg_EtOH_Ub_0_0_mapq10_noDup_with_chippos_sort.txt
+
+d) Run /home/wlku/Desktop/ben_stanton_data/simplify_macs_peaks_file.m
+e) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+f)	cd  /home/wlku/Desktop/ben_stanton_data/run789
+	
+	sort -k2,2 -k3g,3<GA7219_macs_peaks_with_peak_pos.txt>GA7219_macs_peaks_with_peak_pos_sorted.txt
+
+g) Run /home/wlku/Desktop/ben_stanton_data/map_read_to_macs_peak.cpp
+
+h) (For analysis, comparison between peaks within the same library)Run /home/wlku/Desktop/ben_stanton_data/analyze_peak_for_frag_len_within_library.m 
+
+============================================================================
+2a) Maplot-Enhancer
+============================================================================
+
+a) 	[/home/wlku/Desktop/ben_stanton_data/tag_density_at_enhancer.cpp (at 165.112.110.89)]
+	Run /home/wlku/ben_stanton_data/tag_density_at_enhancer.cpp (at 165.112.109.62)
+
+b) 	(165.112.109.62) cd /home/wlku/ben_stanton_data/maplot/maplot_enahncer 
+
+	scp *.txt kuw@165.112.110.89:/home/wlku/Desktop/ben_stanton_data/maplot/maplot_enhancer
+
+c) run /home/wlku/Desktop/ben_stanton_data/maplot_for_enhancer.m
+
+============================================================================
+2b) Maplot-TSS
+============================================================================
+
+a) 	ssh 62)
+
+b) 	(165.112.109.62) cd /home/wlku/ben_stanton_data/maplot/maplot_tss
+
+	scp *.txt kuw@165.112.110.89:/home/wlku/Desktop/ben_stanton_data/maplot/maplot_tss
+
+c) run /home/wlku/Desktop/ben_stanton_data/maplot_for_tss.m
+
+============================================================================
+3) Maplot-CPG Islands
+============================================================================
+
+a) Download CPG Island file from UCSC genome browser, and save it at /home/wlku/Desktop/chipseq_analysis/cpg_island/mm9_ucsc_gtf_cpg.txt
+
+b) Run /home/wlku/Desktop/ben_stanton_data/extract_cpg_island.m
+
+c) Run /home/wlku/Desktop/chipseq_analysis/cpg_island/compute_peak_location.cpp
+
+d)	cd /home/wlku/Desktop/chipseq_analysis/cpg_island
+
+	sort -k2,2 -k5g,5<mm9_ucsc_gtf_cpg_3_with_cpg_pos.txt>mm9_ucsc_gtf_cpg_3_with_cpg_pos_sorted.txt
+
+e) 	[/home/wlku/Desktop/ben_stanton_data/tag_density_at_cpg.cpp (at 165.112.110.89)]
+	Run /home/wlku/ben_stanton_data/tag_density_at_cpg.cpp (at 165.112.109.62)
+
+f)	(165.112.109.62) cd /home/wlku/ben_stanton_data/maplot/maplot_cpg 
+
+	scp *.txt kuw@165.112.110.89:/home/wlku/Desktop/ben_stanton_data/maplot/maplot_cpg
+
+g) 	run /home/wlku/Desktop/ben_stanton_data/maplot_for_cpg.m
+
+============================================================================
+4) MAplot with or without Brg binding (Enahncer)
+============================================================================
+
+a) Download the Brg_J1_chip-seq from a paper (pubmed: Ho Keji Crabtree)
+
+b) Run bowtie and macs14, the files are located in /home/wlku/Desktop/ben_stanton_data/brg_binding
+
+c) Run /home/wlku/Desktop/ben_stanton_data/simplify_macs_peaks_file.m
+
+d) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+e)	cd  /home/wlku/Desktop/ben_stanton_data/brg_binding
+	
+	sort -k2,2 -k3g,3<Brg_J1_chip_peaks_with_peak_pos.txt>Brg_J1_chip_peaks_with_peak_pos_sorted.txt
+	or 
+
+	cd  /home/wlku/Desktop/ben_stanton_data/stat3_binding
+
+	sort -k2,2 -k3g,3<STAT3_chip_peaks_with_peak_pos.txt>STAT3_chip_peaks_with_peak_pos_sorted.txt
+
+
+f) Run /home/wlku/Desktop/ben_stanton_data/mac_peak_density_at_enhancer.cpp
+
+g) Run /home/wlku/Desktop/ben_stanton_data/analyze_brg_binding_with_maplot_data_enhancer.m
+============================================================================
+5) MAplot with or without Brg binding (CpG Island)
+============================================================================
+
+a) Run /home/wlku/Desktop/ben_stanton_data/mac_peak_density_at_cpg_island.cpp
+
+b) Run /home/wlku/Desktop/ben_stanton_data/analyze_brg_binding_with_maplot_data_cpg.m
+============================================================================
+6) Vann diagram analysis for overlapped peaks between chip-seq data
+============================================================================
+[Steps a, b, c may have been done in other analysis]
+
+a) Run /home/wlku/Desktop/ben_stanton_data/simplify_macs_peaks_file.m
+b) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+c)	cd  /home/wlku/Desktop/ben_stanton_data/run792
+	
+	sort -k2,2 -k3g,3<GA7819_macs_peaks_with_peak_pos.txt>GA7819_macs_peaks_with_peak_pos_sorted.txt
+
+d) Run /home/wlku/Desktop/ben_stanton_data/vann_diagram_overlap_of_peaks.m
+
+============================================================================
+7) MAplot For ChIp-seq data RUN792 (Enhancer) similar to (2)
+============================================================================
+[Steps a, b, c may have been done in other analysis]
+
+a) Run /home/wlku/Desktop/ben_stanton_data/sort_chipseq_pos.cpp
+b) Run /home/wlku/Desktop/ben_stanton_data/quantify_chromo_column.cpp
+c)	
+	cd  /home/wlku/Desktop/ben_stanton_data/run792
+
+	sort -k2,2 -k5g,5<GA7821_mouse_Brg_EtOH_Ub_0_0_mapq10_noDup_with_chippos_quantify_chromo.bed>GA7821_mouse_Brg_EtOH_Ub_0_0_mapq10_noDup_with_chippos_sort.txt
+
+
+d) 	[/home/wlku/Desktop/ben_stanton_data/tag_density_at_enhancer.cpp (at 165.112.110.89)]
+	Run /home/wlku/ben_stanton_data/tag_density_at_enhancer.cpp (at 165.112.109.62)
+
+e) 	(165.112.109.62) cd /home/wlku/ben_stanton_data/maplot/maplot_enahncer 
+
+	scp *.txt kuw@165.112.110.89:/home/wlku/Desktop/ben_stanton_data/maplot/maplot_enhancer
+
+f) run /home/wlku/Desktop/ben_stanton_data/maplot_for_enhancer.m
+
+============================================================================
+8) MAplot For ChIp-seq data RUN792 (Cpg) similar to (3)
+============================================================================
+a) 	[/home/wlku/Desktop/ben_stanton_data/tag_density_at_cpg.cpp (at 165.112.110.89)]
+	Run /home/wlku/ben_stanton_data/tag_density_at_cpg.cpp (at 165.112.109.62)
+
+b)	(165.112.109.62) cd /home/wlku/ben_stanton_data/maplot/maplot_cpg 
+
+	scp *.txt kuw@165.112.110.89:/home/wlku/Desktop/ben_stanton_data/maplot/maplot_cpg
+
+c) 	run /home/wlku/Desktop/ben_stanton_data/maplot_for_cpg.m
+
+
+===============================================================================================
+9) Connect Atac-seq data to Chip-seq(Run792) (In particular, we want to see w/o Ring1b Binding)
+===============================================================================================
+
+a) Run /home/wlku/Desktop/ben_stanton_data/simplify_macs_peaks_file.m
+
+b) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+c)	cd  /home/wlku/Desktop/ben_stanton_data/brg_binding
+	
+	sort -k2,2 -k3g,3<Brg_J1_chip_peaks_with_peak_pos.txt>Brg_J1_chip_peaks_with_peak_pos_sorted.txt
+
+d) Run /home/wlku/Desktop/ben_stanton_data/mac_peak_density_at_enhancer.cpp
+
+e) Run /home/wlku/Desktop/ben_stanton_data/analyze_brg_binding_with_maplot_data_enhancer.m
+
+===========================================================================================
+10) Filter those enhancers that are overlapped with TSS
+===========================================================================================
+
+a) Run /home/wlku/Desktop/ben_stanton_data/filter_tss_for_enhancer.m
+
+b) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+c)	cd  /home/wlku/Desktop/chipseq_analysis/run605_KZ355
+	
+	sort -k2,2 -k3g,3<GA4906_macs_peaks_with_peak_pos_filter_tss.txt>GA4906_macs_peaks_with_peak_pos_sorted_filter_tss.txt
+
+d) Run /home/wlku/Desktop/ben_stanton_data/mac_peak_density_at_enhancer.cpp
+
+e) Run /home/wlku/Desktop/ben_stanton_data/analyze_brg_binding_with_maplot_data_enhancer.m
+
+=============================================================================================
+11) Analyze Stat3 chip-seq
+=============================================================================================
+
+a) Download the SRA file from GEO dataset (Huck Ng 2008 paper)
+
+b) From SRA toolkit (fastq-dump SRR002016.sra)
+
+c) cat *.fastq>SRR00201.fastq
+
+============================================================================
+12)MAplot with or without Brg binding (TSS)
+============================================================================
+
+a) Run /home/wlku/Desktop/ben_stanton_data/mac_peak_density_at_tss.cpp
+
+b) Run /home/wlku/Desktop/ben_stanton_data/analyze_brg_binding_with_maplot_data_tss.m
+
+
+============================================================================
+12)MAplot for Atac-seq data with different brg chip density level (TSS)
+============================================================================
+
+
+a) Run /home/wlku/Desktop/ben_stanton_data/sort_chipseq_pos.cpp
+b) Run /home/wlku/Desktop/ben_stanton_data/quantify_chromo_column.cpp
+c)	cd  /home/wlku/Desktop/ben_stanton_data/brg_binding
+
+	sort -k2,2 -k5g,5<Brg_J1_chip_0_0_mapq10_noDup_with_chippos_quantify_chromo.bed>Brg_J1_chip_0_0_mapq10_noDup_with_chippos_sort.txt
+
+d) 	For Brg ChIP, 
+	[/home/wlku/Desktop/ben_stanton_data/tag_density_at_tss.cpp (at 165.112.110.89)]
+	Run /home/wlku/ben_stanton_data/tag_density_at_tss.cpp (at 165.112.109.62)
+
+e) 	(165.112.109.62) cd /home/wlku/ben_stanton_data/maplot/maplot_tss 
+
+	scp *.txt kuw@165.112.110.89:/home/wlku/Desktop/ben_stanton_data/maplot/maplot_tss
+
+
+f) Run /home/wlku/Desktop/ben_stanton_data/analyze_maplot_data_with_brg_chip_data_tss.m
+
+============================================================================
+13)MAplot for Atac-seq data with different brg chip density level (Enhancer)
+============================================================================
+a) Run /home/wlku/Desktop/ben_stanton_data/sort_chipseq_pos.cpp
+b) Run /home/wlku/Desktop/ben_stanton_data/quantify_chromo_column.cpp
+c)	cd  /home/wlku/Desktop/ben_stanton_data/brg_binding
+
+	sort -k2,2 -k5g,5<Brg_J1_chip_0_0_mapq10_noDup_with_chippos_quantify_chromo.bed>Brg_J1_chip_0_0_mapq10_noDup_with_chippos_sort.txt
+
+d) 	For Brg ChIP, 
+	[/home/wlku/Desktop/ben_stanton_data/tag_density_at_enhancer.cpp (at 165.112.110.89)]
+	Run /home/wlku/ben_stanton_data/tag_density_at_enhancer.cpp (at 165.112.109.62)
+
+e) 	(165.112.109.62) cd /home/wlku/ben_stanton_data/maplot/maplot_enhancer 
+
+	scp *.txt kuw@165.112.110.89:/home/wlku/Desktop/ben_stanton_data/maplot/maplot_enhancer
+
+f) Run /home/wlku/Desktop/ben_stanton_data/analyze_maplot_data_with_brg_chip_data_enhancer.m
+
+============================================================================
+14)MAplot for Atac-seq data with different brg chip density level (CpG)
+============================================================================
+a) 	For Brg ChIP, 
+	[/home/wlku/Desktop/ben_stanton_data/tag_density_at_cpg.cpp (at 165.112.110.89)]
+	Run /home/wlku/ben_stanton_data/tag_density_at_cpg.cpp (at 165.112.109.62)
+
+b) 	(165.112.109.62) cd /home/wlku/ben_stanton_data/maplot/maplot_cpg 
+
+	scp *.txt kuw@165.112.110.89:/home/wlku/Desktop/ben_stanton_data/maplot/maplot_cpg
+
+c) Run /home/wlku/Desktop/ben_stanton_data/analyze_maplot_data_with_brg_chip_data_cpg.m
+
+===================================================================================
+15) Compute RPKM(gene expression level) for ES mouse cell
+===================================================================================
+
+a) Download the gene expression data from Dan K (GA3216) from an external hard drive.
+
+b) Run /v/bisb1a/kuw/wlku/pipeline/run505/sh sub_job.sh script
+
+c) Copy the BED file from biocoreserver1:/v/bisb1a/kuw/wlku/pipeline/run505/ to matrixnih:/ho	me/wlku/Desktop/ben_stanton_data/run505/run505/
+
+d) Run /home/wlku/ben_stanton_data/generate_rnaseqfile_with_seqpos.cpp
+
+e)	cd /home/wlku/Desktop/ben_stanton_data/run505/run505/
+	 	
+	sort -k2,2 -k3g,3<GA3216_mouse_ES_rnaseq_shLuc_0_0_with_chromo_index.txt>GA3216_mouse_ES_rnaseq_shLuc_0_0_with_chromo_index_sorted.txt
+
+f) Run /home/wlku/ben_stanton_data/readcount_map_to_exon.cpp
+
+g) Run /home/wlku/ben_stanton_data/compute_rpkm.cpp
+
+===================================================================================
+16) Analyze RPKM files for TSS
+===================================================================================
+
+a) 
+
+b)
+
+c)
+
+===================================================================================
+17) Analyze RPKM files for enhancer
+===================================================================================
+
+a) 
+
+b) Run /home/wlku/Desktop/ben_stanton_data/assign_enhancer_with_rpkm_value.m
+
+c) Run /home/wlku/Desktop/ben_stanton_data/analyze_maplot_data_with_rnaseq_data_enhancer.m
+
+
+
+
+===================================================================================
+18) Heatmap analsis clutering, manorm
+===================================================================================
+
+
+
+===============================================================================
+19) Spike in
+===============================================================================
+
+a) map to mouse and human
+
+b) take out reads that mapped to both
+
+==============================================================================
+20) Distribution of spike in data at TSS (both human and mouse)
+==============================================================================
+
+a) Run /home/wlku/Desktop/ben_stanton_data/sort_cpp (for both hg18 and mm9)
+b) Run /home/wlku/Desktop/ben_stanton_data/quantify_chromo_column.cpp (for both hg18 and mm9)
+c) Run  /home/wlku/Desktop/ben_stanton_data/script_sort
+
+d) Run kuw@biocoreserver1.nhlbi.nih.gov:/v/bisb1a/kuw/wlku/ben_stanton_data/chipden_dis_at_tss.cpp 
+
+e) Run /home/wlku@Desktop/ben_stanton_data/analyze_chip_den_dis_at_tss.m
+
+==============================================================================
+21) Distribution of spike in data at Enhancer (both human and mouse)
+==============================================================================
+
+(maybe optional) Repeat a-c in 20)
+
+a) Run kuw@biocoreserver1.nhlbi.nih.gov:/v/bisb1a/kuw/wlku/ben_stanton_data/chipden_dis_at_enhancer.cpp 
+
+b) Run /home/wlku@Desktop/ben_stanton_data/analyze_chip_den_dis_at_enhancer.m
+
+
+
+==============================================================================
+22) Distribution of spike in data at all combined peaks regions (mouse)
+==============================================================================
+(Prepare the combined peaks files: GA7701 to GA7705 + GA7850)
+
+a) Run /home/wlku/Desktop/ben_stanton_data/simplify_macs_peaks_file.m
+
+b) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+c)	cd  /home/wlku/Desktop/ben_stanton_data/brg_binding
+	
+	sort -k2,2 -k3g,3<Brg_J1_chip_peaks_with_peak_pos.txt>Brg_J1_chip_peaks_with_peak_pos_sorted.txt
+
+(maybe optional) Repeat a-c in 20)
+
+d) Run generate_combined_peaks_file_for_j1_chip.m
+
+e) Run kuw@biocoreserver1.nhlbi.nih.gov:/v/bisb1a/kuw/wlku/ben_stanton_data/chipden_dis_at_combined_peaks.cpp 
+
+f) Run /home/wlku@Desktop/ben_stanton_data/analyze_chip_den_dis_at_combined_peaks.m
+
+==============================================================================
+23) Analysis (rewrite later)
+==============================================================================
+
+a) Run macs by  inputing the input files
+
+b) Run /home/wlku/Desktop/ben_stanton_data/simplify_macs_peaks_file.m
+
+c) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+d) Run script_sort_peak
+
+e) (Venn_diagram) run vann_diagram_overlap_of_peaks_J1_chips_ko_rybp.m
+
+f) RUN generate_combined_peaks_file_for_j1_chip.m
+ 
+g) Run /home/wlku/Desktop/ben_stanton_data/sort_cpp (for  mm9)
+
+h) Run /home/wlku/Desktop/ben_stanton_data/quantify_chromo_column.cpp (for mm9)
+
+i) Run  /home/wlku/Desktop/ben_stanton_data/script_sort
+
+j) Run /home/wlku/ben_stanton_data/tag_density_at_combined_peaks.cpp
+
+k) Run maplot_for_combined_peaks.m
+
+l) run vann_diagram_overlap_of_peaks_with_tss_or_en.m
+
+m) run heatmap_analysis.m
+
+==============================================================================
+23) Analysis-2 for heatmap profile
+==============================================================================
+
+a) run chipden_dis_matrix_at_combined_peaks.cpp 
+
+b) run heatmap_analysis_j1_chip_rybp_ff.m
+
+(repeat the analysis and filter the backgroud)
+(after peak calling then filter the bed files, include only reads in peaks)
+c) run filter_reads_outside_peak_region.cpp
+
+d) run chipden_dis_matrix_at_combined_peaks.cpp 
+
+e) run heatmap_analysis_j1_chip_rybp_ff.m
+
+(sorting the rows in the heatmap based on the tag density in the identified peak regions.)
+
+f) Run generate_combined_peaks_file_for_j1_chip_with_tag.m
+
+g) Run tag_density_at_test_peaks.cpp for testing results from filter_reads_outside_peak_region.cpp
+
+
+g) run heatmap_analysis_j1_chip_rybp_ff_with_tag_den.m
+
+==============================================================================
+24) Distribution of spike in data at TSS (both human and mouse) for Brg Etoh and Tamoxifen (Rybp, Ub, Ring1b, Input - Chip)
+==============================================================================
+
+a) Run /home/wlku/Desktop/ben_stanton_data/sort_cpp (for both hg18 and mm9)
+b) Run /home/wlku/Desktop/ben_stanton_data/quantify_chromo_column.cpp (for both hg18 and mm9)
+c) Run  /home/wlku/Desktop/ben_stanton_data/script_sort
+
+d) Run kuw@biocoreserver1.nhlbi.nih.gov:/v/bisb1a/kuw/wlku/ben_stanton_data/chipden_dis_at_tss.cpp 
+
+e) Run /home/wlku@Desktop/ben_stanton_data/analyze_chip_den_dis_at_tss_2.m
+
+==============================================================================
+25) Distribution of spike in data at TSS (both human and mouse) for Brg Etoh and Tamoxifen (Rybp, Ub, Ring1b, Input - Chip) (Do the spike-in analysis with filtering out the input reads)
+==============================================================================
+
+a) Run kuw@biocoreserver1.nhlbi.nih.gov:/v/bisb1a/kuw/wlku/ben_stanton_data/chipden_dis_matrix_at_tss.cpp 
+
+b) Run heatmap_analysis_prc_chip_brg_ff_with_tag_den.m
+
+c Run analyze_chip_den_dis_matrix_at_tss.m
+
+
+==============================================================================
+26) Heatmap for 
+==============================================================================
+
+a) Run macs14 for the bed files in run804_KZ862
+
+b) Run /home/wlku/Desktop/ben_stanton_data/simplify_macs_peaks_file.m
+
+c) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+d) Run script_sort_peak
+
+e) Run generate_combined_peaks_file_for_ring1b_chip.m
+
+f) Run /home/wlku/Desktop/ben_stanton_data/sort_cpp (for mm9)
+
+g) Run /home/wlku/Desktop/ben_stanton_data/quantify_chromo_column.cpp (for mm9)
+
+
+i) run chipden_dis_matrix_at_combined_peaks.cpp 
+
+j) run heatmap_analysis_ring1b_chip_cancermutant.m
+
+================================================================================
+27)
+================================================================================
+a) run /home/wlku/Desktop/ben_stanton_data/generate_combined_peaks_file_for_ring1b_chip_with_tag.m
+
+
+=============================================================================
+28) Differential peaks for Ring1b-Chip data
+=============================================================================
+a) run generate_edgeR_diff_chip_input_file_for_ring1b_chip.m
+b) Run read_counts_at_those_peaks
+c) Find all differetial peaks
+d) combined all differetial peaks.
+
+
+
+=============================================================================
+29) 
+=============================================================================
+
+a) run generate_edgeR_diff_chip_input_file_for_ring1b_chip.m
+
+b) run edgeR_diff_chip_binding.r
+
+c) 
+
+=============================================================================
+30) To compare the differential peaks between two files and run homer for the motif analysis
+ Here I want to compare the two WT Ring1b_ChIP replicates and two cancer mutants Ring1b_ChIP replicates
+============================================================================
+
+a) Make sure the macs files exists.
+
+b) run script_sort_2_peaks
+
+c) run generate_combined_two_peaks_file_for_ring1b_chip.m
+
+d) run readcount_at_combined_peaks.cpp at biocoreserver1
+
+e) run generate_edgeR_file_from_twofiles_format_chr_pos_readcount.m
+
+f) run edgeR_diff_chip_binding.r
+
+g) run generate_homer_motif_prefile.m 
+
+h) sh ~/wlku/ben_stanton_data/extract_seq at biocoreserver1
+
+
+=============================================================================
+31) To compare the differential peaks between two files
+ Here I want to compare the two WT Ring1b_ChIP replicates and two cancer mutants Ring1b_ChIP replicates
+============================================================================
+
+a) Make sure the macs files exists.
+
+b) run script_sort_2_peaks_2.sh (chmod +x script_sort_2_peaks_2.sh and ./xxx.sh)
+
+c) run generate_combined_two_peaks_file_for_ring1b_chip.m
+
+d) run readcount_at_combined_peaks_run_all.cpp at biocoreserver1
+
+e) run generate_edgeR_file_from_twofiles_format_chr_pos_readcount.m
+
+f) run edgeR_diff_chip_binding.r
+
+g) run analyze_diff_peaks_ring1b_chip.m
+
+h) run analyze_diff_peaks_ring1b_chip_reliable_set.m
+
+i) run vann_diagram_overlap_of_peaks_ring1b_histonemark.m
+
+j) run vann_diagram_overlap_of_peaks_ring1b_brg_chip.m
+
+k) run compute_exp_and_ob_overlap_peaks_ring1b_and_otherchip.m
+=============================================================================
+31) Compute corresponding gene for differential peaks Ring1b ChIP data
+============================================================================
+
+
+==============================================================================
+32) Compute corresponding gene for differential peaks Ring1b ChIP data
+==============================================================================
+
+a) mkdir brg_ko_ring1b_chip
+
+b) copy bed file to the folder
+
+c) run macs
+
+d) Run /home/wlku/Desktop/ben_stanton_data/simplify_macs_peaks_file.m (I can change the cut off of peaks in this step)
+
+e) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+f) Run script_sort_peak
+
+g) (Venn_diagram) run vann_diagram_overlap_of_peaks_prc1_chip.m
+
+h) run pie_chart_ring1b_chip.m
+
+i) run script_sort_2_peaks_3.sh (chmod +x script_sort_2_peaks_3.sh and ./xxx.sh)
+
+j) run generate_combined_two_peaks_file_for_ring1b_chip_2.m
+
+k) Run /home/wlku/Desktop/ben_stanton_data/sort_cpp (for  mm9)
+
+l) Run /home/wlku/Desktop/ben_stanton_data/quantify_cpp (for mm9)
+
+m) Run /home/wlku/Desktop/ben_stanton_data/script_sort
+
+n) run readcount_at_combined_peaks.cpp at biocoreserver1
+
+o) run generate_edgeR_file_from_twofiles_format_chr_pos_readcount_2.m
+
+p) run edgeR_diff_chip_binding.r
+
+q) analyze_log_log_plot_ring1b_chip.m
+
+==============================================================================
+33) Heatmap for differential peaks Ring1b ChIP data
+==============================================================================
+
+a) Run script_sort_peak
+
+b) RUN generate_combined_peaks_file_for_j1_chip.m
+
+c) run sh sub_job.sh script_chipden_matrix
+/run chipden_dis_matrix_at_combined_peaks.cpp 
+
+d) run heatmap_analysis_ring1b_chip_brg_ko.m
+
+==============================================================================
+34) Heatmap for differential peaks in different groups.
+==============================================================================
+
+a) (Venn_diagram) run vann_diagram_overlap_of_peaks_prc1_chip.m
+
+b) run compute_peak_location.cpp for the files in the folder of peak_overlap
+
+a) Run script_sort_peak
+
+b) RUN generate_combined_peaks_file_for_j1_chip.m
+
+c) run sh sub_job.sh script_chipden_matrix
+/run chipden_dis_matrix_at_combined_peaks.cpp 
+
+d) run heatmap_analysis_ring1b_brg_ko_in_threegroup_wt_ko_both.m
+
+==============================================================================
+35) Use two replicates to find differential peaks.
+==============================================================================
+a) run script_sort_2_peaks_4.sh (chmod +x script_sort_2_peaks_3.sh and ./xxx.sh)
+
+b) run generate_combined_two_peaks_file_for_ring1b_chip_2.m
+
+c) run readcount_at_combined_peaks.cpp at biocoreserver1
+
+d) run generate_edgeR_file_from_fourfiles_format_chr_pos_readcount_3.m
+
+e) run edgeR_diff_chip_binding_using_two_replicates.r
+
+f) run analyze_log_log_plot_ring1b_chip_using_two_replicates.m
+
+g) run smooth_scatter_plot_log_log_density_fc_betweeen_two_rep.r
+
+==============================================================================
+36) Compare differential peaks with different chip-seq data
+==============================================================================
+
+a) For the histone data (H3K4me3, H3K27ac, H3K27me3), I use run762_KZ754, I copy the noDup.bed file from hugq.
+   I run macs14 for those bed files.
+
+b) Run /home/wlku/Desktop/ben_stanton_data/simplify_macs_peaks_file.m
+
+c) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+d) Run script_sort_peak
+
+e)(Assume finish step 35e, then here is to change the format of the excel file of diff peaks)
+  run change_diff_peaks_xls_to_diff_peaks_txt.m
+
+f) run venn_diagram_overlap_of_peaks_two_chips.m
+
+g) (temporiliy to compute fold change and p-value, I need a universe set of peaks. I combined peaks from stat3 binding, brg binding, H3k4me3, h3k27ac, h3k27me3, 250_ko_ring1b_chip, brg_ko_ring1b_chip)
+
+g:1)run script_sort_2_peaks_5.sh (chmod +x script_sort_2_peaks_5.sh and ./xxx.sh)
+
+g:2)run generate_combined_peaks_file.m
+
+h) run compute_fc_chip_overlap_with_histone.m
+
+==============================================================================
+36) Compare differential peaks with TSS
+==============================================================================
+a) generate_tss_mm9_location.m
+
+b) run venn_diagram_overlap_of_peaks_chips_tss.m
+
+c) run david go tool
+
+d) plot_hist_of_david_go_output.m
+
+==============================================================================
+37) Compare peaks between overlap
+==============================================================================
+
+a)  Run /home/wlku/Desktop/ben_stanton_data/simplify_macs_peaks_file.m
+
+b) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+c) Run script_sort_peak
+
+d) (Venn_diagram) run vann_diagram_overlap_of_peaks.m
+
+
+==============================================================================
+38) Compare peaks that are called using SICER between overlap
+==============================================================================
+
+a) sh run_SICER.sh (This is for treated file that is along with an input file)
+
+b) (Venn_diagram) run venn_diagram_overlap_of_SICER_peaks.m
+
+
+==============================================================================
+39)  Compare differential peaks with different chip-seq data and called peaks by SICER
+==============================================================================
+a) Run /home/wlku/Desktop/ben_stanton_data/simplify_sicer_peaks_file.m
+
+b) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+c) Run script_sort_peak
+
+d) run script_sort_2_peaks_6.sh (chmod +x script_sort_2_peaks_3.sh and ./xxx.sh)
+
+e) run generate_combined_two_peaks_file_for_sicer_call_peaks.m
+
+f) run readcount_at_combined_peaks.cpp at biocoreserver1
+
+g) run generate_edgeR_file_from_fourfiles_format_chr_pos_readcount_3.m
+
+h) run edgeR_diff_chip_binding_using_two_replicates.r
+
+i) run analyze_log_log_plot_ring1b_chip_using_two_replicates.m
+
+j) run smooth_scatter_plot_log_log_density_fc_betweeen_two_rep.r
+
+==============================================================================
+40)  Compare differential peaks for 53a ko data using macs
+==============================================================================
+a) Run /home/wlku/Desktop/ben_stanton_data/simplify_macs_peaks_file.m
+
+b) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+c) Run script_sort_peak
+
+d) run script_sort_2_peaks_7.sh (chmod +x script_sort_2_peaks_3.sh and ./xxx.sh)
+
+e) run generate_combined_two_peaks_file_for_sicer_call_peaks.m
+
+f) Run /home/wlku/Desktop/ben_stanton_data/sort_cpp (for  mm9)
+
+g) Run /home/wlku/Desktop/ben_stanton_data/quantify_cpp (for mm9)
+
+h) Run /home/wlku/Desktop/ben_stanton_data/script_sort
+
+i) run readcount_at_combined_peaks.cpp at biocoreserver1
+
+j) run generate_edgeR_file_from_fourfiles_format_chr_pos_readcount_3.m
+
+k) run edgeR_diff_chip_binding_using_two_replicates.r
+
+l) run analyze_log_log_plot_ring1b_chip_using_two_replicates.m
+
+m) run smooth_scatter_plot_log_log_density_fc_betweeen_two_rep.r
+
+==============================================================================
+41) Compare differential peaks with TSS for 53a ko
+==============================================================================
+a) generate_tss_mm9_location.m
+
+b) run venn_diagram_overlap_of_peaks_chips_tss.m
+
+c) run david go tool
+
+d) plot_hist_of_david_go_output.m
+
+
+==============================================================================
+42)
+==============================================================================
+
+a)venn_diagram_overlap_of_two_diff_edgeR_peaks.m
+
+==============================================================================
+43) Generate renormalized graph files
+==============================================================================
+a) Run simplify_sicer_peaks_file_2.m
+
+b) Run compute_peak_location.cpp
+
+c) Run script_sort_peak
+
+	Run script_sort_2_peak_8.sh
+
+	run generate_combined_two_peaks_file_for_sicer_call_peaks.m
+
+d) generate_combined_peaks_files_with_smaller_winsize.m
+
+e) run script_readcount_at_combined_peaks in the folder of brg_ko_ring1b_chip in core1 server. (note: change the output to four column instead of five columns in the file readcount_at_combined_peaks.cpp)
+
+f) run convert_readcount_file_to_graph_file.m
+
+
+==============================================================================
+44) Read density distribution  at TSS (with and without Brg binding)
+==============================================================================
+
+a) (note: Compute gene sets that have brg and without brg binding.)
+
+i) may run generate_tss_mm9_location.m
+
+ii) run venn_diagram_overlap_of_brg_chips_tss.m
+
+b) run chipden_dis_at_combined_peaks.cpp (biocoreserver1.nhlbi.nih.gov)
+
+c) run analyze_chip_den_dis_at_brg.m
+
+d) run analyze_macs_peaks_file.m
+
+e) run compute_readcount_in_sig_overlap_peak.m
+
+==============================================================================
+45)  Compare differential peaks for atac-seq cancer mutants
+==============================================================================
+a) Run /home/wlku/Desktop/ben_stanton_data/simplify_macs_peaks_file.m
+
+b) Run /home/wlku/Desktop/ben_stanton_data/compute_peak_location.cpp
+
+c) Run script_sort_peak
+
+d) run script_sort_2_peaks_8.sh (chmod +x script_sort_2_peaks_3.sh and ./xxx.sh)
+
+e) run generate_combined_two_peaks_file_for_sicer_call_peaks.m
+
+f) Run /home/wlku/Desktop/ben_stanton_data/sort_cpp (for  mm9)
+
+g) Run /home/wlku/Desktop/ben_stanton_data/quantify_cpp (for mm9)
+
+h) Run /home/wlku/Desktop/ben_stanton_data/script_sort
+
+i) run readcount_at_combined_peaks.cpp at biocoreserver1
+
+j) run generate_edgeR_file_from_fourfiles_format_chr_pos_readcount_3.m
+
+k) run edgeR_diff_chip_binding_using_two_replicates.r
+
+l) run analyze_log_log_plot_ring1b_chip_using_two_replicates.m
+
+m) run smooth_scatter_plot_log_log_density_fc_betweeen_two_rep.r
+
+n) run change_diff_peaks_xls_to_diff_peaks_txt.m
+
+n) run venn_diagram_overlap_of_peaks_chips_tss.m
+
+==============================================================================
+46)  Relate differential sites via HiC
+==============================================================================
+
+a) run change_diff_peaks_xls_to_diff_peaks_txt.m
+
+b) run venn_diagram_overlap_of_peaks_chips_domain.m
+

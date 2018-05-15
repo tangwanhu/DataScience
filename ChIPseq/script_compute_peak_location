@@ -1,0 +1,6 @@
+#./compute_peak_location  /data/kuw/biocore/wlku/Keji/run733/ GA6401_macs_without_input_peaks_2.txt GA6401_macs_without_input_peaks_with_peak_pos.txt
+
+./compute_peak_location  /data/kuw/biocore/wlku/Keji/run733/ GA6401_macs_without_input_peaks_at_tss_2.txt GA6401_macs_without_input_peaks_at_tss_with_peak_pos.txt
+
+./compute_peak_location  /data/kuw/biocore/wlku/Keji/run733/ GA6401_macs_without_input_peaks_without_tss_2.txt GA6401_macs_without_input_peaks_without_tss_with_peak_pos.txt
+
